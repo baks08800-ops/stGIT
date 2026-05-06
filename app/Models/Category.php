@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Post;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 
