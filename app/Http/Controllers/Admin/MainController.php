@@ -9,6 +9,6 @@ class MainController extends Controller
 {
     public function index()
     {
-        return view('home.index');
+        return view('admin.categories.index');
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Post;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Category extends Model
 {
@@ -18,7 +20,7 @@ class Category extends Model
      * Return the sluggable configuration array for this category.
      * @return array
      */
-    public function sluggable()
+    public function sluggable():array
     {
         return [
             'slug' => [

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\MainController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['prefix'=>'admin','namespace'=>'Admin'], function(){
+Route::group(['prefix'=>'admin',], function(){
     Route::get('/',[MainController::class,'index'])->name('admin.index');
+    Route::resource('/categories', CategoryController::class);
+    //Route::resource('/tags', TagController::class);
 });
