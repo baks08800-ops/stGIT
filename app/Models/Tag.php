@@ -11,10 +11,19 @@ use Cviebrock\EloquentSluggable\Sluggable;
 class Tag extends Model
 {
     use Sluggable;
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+    ];
 
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class);
     }
 
     /**

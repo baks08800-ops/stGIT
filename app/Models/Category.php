@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use Sluggable;
+    
+    protected $fillable = [
+        'title',
+    ];
 
     public function posts()
     {
@@ -19,7 +23,7 @@ class Category extends Model
      * Return the sluggable configuration array for this category.
      * @return array
      */
-    public function sluggable():array
+    public function sluggable(): array
     {
         return [
             'slug' => [
