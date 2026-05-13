@@ -1,17 +1,34 @@
 <?php
+
 namespace App\Models;
 
-use App\Models\Category;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use Sluggable;
+    use HasFactory;
 
-    public function tags()
+    protected $fillable = [
+        'title',
+        'slug',
+        'description',
+        'content',
+        'category_id',
+        'thumbnail'
+    ];
+
+    // Автоматически генерируем slug при создании
+    protected static function boot()
     {
-        return $this->belongsToMany(Tag::class);
+        parent::boot();
+
+        static::creating(function ($post) {
+            if (empty($post->slug)) {
+                $post->slug = Str::slug($post->title);
+            }
+        });
     }
 
     public function category()
@@ -19,17 +36,8 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
+    public function tags()
     {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
+        return $this->belongsToMany(Tag::class);
     }
 }

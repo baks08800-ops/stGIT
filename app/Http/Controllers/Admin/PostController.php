@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -15,8 +15,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::paginate(20);
-        return view('admin.posts.index',compact('posts'));
+        $posts = Post::with(['category', 'tags'])->orderBy('id', 'desc')->paginate(10);
+        
+        return view('admin.posts.index', compact('posts'));
     }
 
     /**
@@ -24,9 +25,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = Category::pluck('title','id')->all();
-        $tags=Tag::pluck('title','id')->all();
-        return view('admin.posts.create',compact('categories','tags'));
+        $categories = Category::pluck('title', 'id');
+        $tags = Tag::pluck('title', 'id');
+        
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -35,44 +37,83 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'=>'required',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+            'thumbnail' => 'nullable|image|max:2048'
         ]);
-        dd($request->all());
-        return redirect()->route('posts.index')->with('success', 'Статья добавлена');
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $data = $request->all();
+        
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $data['thumbnail'] = $path;
+        }
+
+        $post = Post::create($data);
+        
+        if ($request->has('tags')) {
+            $post->tags()->sync($request->tags);
+        }
+
+        return redirect()->route('posts.index')->with('success', 'Статья успешно создана');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        return view('admin.posts.edit');
+        $categories = Category::pluck('title', 'id');
+        $tags = Tag::pluck('title', 'id');
+        $selectedTags = $post->tags->pluck('id')->toArray();
+        
+        return view('admin.posts.edit', compact('post', 'categories', 'tags', 'selectedTags'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Post $post)
     {
         $request->validate([
-            'title'=>'required'
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+            'thumbnail' => 'nullable|image|max:2048'
         ]);
-        return redirect()->route('posts.index')->with('success','Изменения сохранены');
+
+        $data = $request->all();
+        
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $data['thumbnail'] = $path;
+        }
+
+        $post->update($data);
+        
+        if ($request->has('tags')) {
+            $post->tags()->sync($request->tags);
+        } else {
+            $post->tags()->sync([]);
+        }
+
+        return redirect()->route('posts.index')->with('success', 'Статья успешно обновлена');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        return redirect()->route('posts.index')->with('success','Статья удалена :(');
+        $post->delete();
+        
+        return redirect()->route('posts.index')->with('success', 'Статья успешно удалена');
     }
 }
