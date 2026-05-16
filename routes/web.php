@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,9 @@ Route::group(['prefix'=>'admin',], function(){
     Route::resource('/categories', CategoryController::class);
     Route::resource('/tags', TagController::class);
     Route::resource('/posts', PostController::class);
+    Route::get('/register', [UserController::class,'create'])->name('register.create');
+    Route::post('/register',[UserController::class, 'store'])->name('register.store');
 });
+Route::get('/',function(){
+    return view('welcome');
+})->name('home');
