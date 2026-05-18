@@ -17,7 +17,10 @@ class PostUController extends Controller
 
     public function show($slug)
     {
-        return view('postsU.show');
+        $post = Post::where('slug', $slug)->firstOrFail();
+        $post->views +=1;
+        $post->update();
+        return view('posts.show', compact('post'));
     }
 
 }

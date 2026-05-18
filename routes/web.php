@@ -31,13 +31,21 @@ Route::group(['prefix'=>'admin',], function(){
 Route::get('/',function(){
     return view('welcome');
 })->name('home');
+
 Route::get('/login',[UserController::class,'loginForm'])->name('login.create');
 Route::post('/login',[UserController::class,'login'])->name('login');
 Route::get('/logout',[UserController::class,'logout'])->name('logout');
+
 Route::get('/', [PostUController::class, 'index'])->name('home');
 Route::get('/post/{slug}', [PostUController::class, 'show'])->name('posts.show');
+
 Route::get('/', [PostUController::class,'index'])->name('home');
 Route::get('/article/{slug}',[PostUController::class,'index'])->name('posts.single');
+
 Route::get('/', [PostUController::class, 'index'])->name('home');
 Route::get('/article/{slug}', [PostUController::class,'index'])->name('posts.single');
 Route::get('category/{slug}', [CategoryController::class, 'show'])->name('categories.single');
+Route::get('/tag/{slug}', [TagController::class, 'show'])->name('tags.show');
+
+Route::get('/', [PostUController::class, 'index'])->name('home');
+Route::get('/post/{slug}', [PostUController::class, 'show'])->name('posts.show');
