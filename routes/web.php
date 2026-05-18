@@ -30,3 +30,6 @@ Route::group(['prefix'=>'admin',], function(){
 Route::get('/',function(){
     return view('welcome');
 })->name('home');
+Route::get('/login',[UserController::class,'loginForm'])->name('login.create');
+Route::post('/login',[UserController::class,'login'])->name('login');
+Route::get('/logout',[UserController::class,'logout'])->name('logout');
