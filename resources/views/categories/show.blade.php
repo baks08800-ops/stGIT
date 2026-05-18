@@ -36,28 +36,27 @@
         </nav>
     </section>
 
-    <!-- Main -->
+
     <section id="main" class="wrapper style2">
         <div class="title">Категория: {{ $category->title }}</div>
         <div class="container">
             <div class="row gtr-150">
+                
+
                 <div class="col-8 col-12-medium imp-medium">
                     <div id="content">
-                        
-                        <!-- Хлебные крошки -->
+
                         <ol class="breadcrumb" style="list-style: none; padding: 0; margin-bottom: 20px;">
                             <li style="display: inline-block;"><a href="{{ route('home') }}">Главная</a> &nbsp;→&nbsp;</li>
                             <li style="display: inline-block; color: #f1c40f;">{{ $category->title }}</li>
                         </ol>
 
-                        <!-- Описание категории -->
                         @if($category->description)
                             <div class="category-description" style="background: #f9f9f9; padding: 15px; margin-bottom: 30px; border-left: 4px solid #f1c40f;">
                                 {{ $category->description }}
                             </div>
                         @endif
 
-                        <!-- Посты в категории -->
                         <div class="feature-list">
                             <div class="row">
                                 @forelse($posts as $post)
@@ -100,7 +99,6 @@
                             </div>
                         </div>
 
-                        <!-- Пагинация -->
                         <div class="pagination-wrapper" style="margin-top: 30px; text-align: center;">
                             {{ $posts->links() }}
                         </div>
@@ -108,39 +106,10 @@
                     </div>
                 </div>
 
-                <!-- Sidebar -->
                 <div class="col-4 col-12-medium">
-                    <div id="sidebar">
-                        <section class="box">
-                            <header>
-                                <h2>О категории</h2>
-                            </header>
-                            <ul class="style3">
-                                <li><strong>Название:</strong> {{ $category->title }}</li>
-                                <li><strong>Количество статей:</strong> {{ $category->posts->count() }}</li>
-                                <li><strong>Дата создания:</strong> {{ $category->created_at->format('d.m.Y') }}</li>
-                            </ul>
-                            <a href="{{ route('home') }}" class="button style1">← На главную</a>
-                        </section>
-
-                        <section class="box">
-                            <header>
-                                <h2>Другие категории</h2>
-                            </header>
-                            <ul class="style3">
-                                @foreach(\App\Models\Category::withCount('posts')->having('posts_count', '>', 0)->get() as $cat)
-                                    @if($cat->id != $category->id)
-                                    <li>
-                                        <a href="{{ route('categories.single', $cat->slug) }}">
-                                            {{ $cat->title }} ({{ $cat->posts_count }})
-                                        </a>
-                                    </li>
-                                    @endif
-                                @endforeach
-                            </ul>
-                        </section>
-                    </div>
+                    @include('layouts.sidebar')
                 </div>
+
             </div>
         </div>
     </section>

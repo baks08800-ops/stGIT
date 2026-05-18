@@ -42,24 +42,10 @@
         <div class="container">
             <div class="row gtr-150">
                 <div class="col-4 col-12-medium">
-                    <!-- Sidebar -->
-                    <div id="sidebar">
-                        <section class="box">
-                            <header>
-                                <h2>О статье</h2>
-                            </header>
-                            <ul class="style3">
-                                <li><strong>Категория:</strong> {{ $post->category->title ?? 'Без категории' }}</li>
-                                <li><strong>Дата:</strong> {{ $post->created_at->format('d.m.Y') }}</li>
-                                <li><strong>Просмотров:</strong> {{ $post->views }}</li>
-                            </ul>
-                            <a href="{{ route('home') }}" class="button style1">← На главную</a>
-                        </section>
-                    </div>
+                    @include('layouts.sidebar')
                 </div>
 
                 <div class="col-8 col-12-medium imp-medium">
-                    <!-- Content -->
                     <div id="content">
                         <article class="box post">
                             <header class="style1">

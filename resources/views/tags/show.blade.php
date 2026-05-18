@@ -9,7 +9,6 @@
 <body class="homepage is-preload">
 <div id="page-wrapper">
 
-    <!-- Header (такой же как в других представлениях) -->
     <section id="header" class="wrapper">
         <div id="logo">
             <h1><a href="{{ route('home') }}">Мой блог</a></h1>
@@ -36,28 +35,26 @@
         </nav>
     </section>
 
-    <!-- Main -->
     <section id="main" class="wrapper style2">
         <div class="title">Тег: #{{ $tag->title }}</div>
         <div class="container">
             <div class="row gtr-150">
+                
                 <div class="col-8 col-12-medium imp-medium">
                     <div id="content">
                         
-                        <!-- Хлебные крошки -->
                         <ol class="breadcrumb" style="list-style: none; padding: 0; margin-bottom: 20px;">
                             <li style="display: inline-block;"><a href="{{ route('home') }}">Главная</a> &nbsp;→&nbsp;</li>
                             <li style="display: inline-block; color: #f1c40f;">#{{ $tag->title }}</li>
                         </ol>
 
-                        <!-- Описание тега -->
+
                         @if($tag->description)
                             <div class="tag-description" style="background: #f9f9f9; padding: 15px; margin-bottom: 30px; border-left: 4px solid #3498db;">
                                 {{ $tag->description }}
                             </div>
                         @endif
 
-                        <!-- Посты с этим тегом -->
                         <div class="feature-list">
                             <div class="row">
                                 @forelse($posts as $post)
@@ -105,7 +102,6 @@
                             </div>
                         </div>
 
-                        <!-- Пагинация -->
                         <div class="pagination-wrapper" style="margin-top: 30px; text-align: center;">
                             {{ $posts->links() }}
                         </div>
@@ -113,40 +109,15 @@
                     </div>
                 </div>
 
-                <!-- Sidebar -->
                 <div class="col-4 col-12-medium">
-                    <div id="sidebar">
-                        <section class="box">
-                            <header>
-                                <h2>О теге</h2>
-                            </header>
-                            <ul class="style3">
-                                <li><strong>Название:</strong> #{{ $tag->title }}</li>
-                                <li><strong>Количество статей:</strong> {{ $tag->posts->count() }}</li>
-                                <li><strong>Slug:</strong> {{ $tag->slug }}</li>
-                            </ul>
-                            <a href="{{ route('home') }}" class="button style1">← На главную</a>
-                        </section>
-
-                        <section class="box">
-                            <header>
-                                <h2>Популярные теги</h2>
-                            </header>
-                            <div class="tag-cloud">
-                                @foreach(\App\Models\Tag::withCount('posts')->having('posts_count', '>', 0)->get() as $t)
-                                    <a href="{{ route('tags.single', $t->slug) }}" style="display: inline-block; margin: 5px; padding: 5px 10px; background: #f4f6f9; border-radius: 5px; text-decoration: none;    font-size: 14px;">
-                                        #{{ $t->title }} ({{ $t->posts_count }})
-                                    </a>
-                                @endforeach
-                            </div>
-                        </section>
-                    </div>
+                    @include('layouts.sidebar')
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Footer (как в других представлениях) -->
+    <!-- Footer -->
     <section id="footer" class="wrapper">
         <div class="title">Свяжитесь со мной</div>
         <div class="container">
